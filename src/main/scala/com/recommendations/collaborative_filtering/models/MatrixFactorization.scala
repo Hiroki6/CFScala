@@ -1,8 +1,7 @@
-package com.fuzyco.models.recommendations
+package com.recommendations.collaborative_filtering.models
 
 import breeze.linalg.DenseMatrix
 import breeze.stats.distributions.Gaussian
-import com.fuzyco.preprocessings.MFD
 
 /**
   * Matrix Factorizationモデル　
@@ -37,4 +36,5 @@ class MatrixFactorization(mfd: MFD, k: Int) {
 
 }
 
+// 重み行列のケースクラス
 case class MFW(value: DenseMatrix[Double])

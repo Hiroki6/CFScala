@@ -1,4 +1,4 @@
-package com.fuzyco.preprocessings
+package com.recommendations.collaborative_filtering.preprocessings
 
 import java.io.File
 
@@ -43,4 +43,5 @@ class MFData {
   }
 }
 
+// 特徴ベクトルのケースクラス
 case class MFD(value: DenseMatrix[Double])
