@@ -45,4 +45,4 @@ class MFDGenerator {
 }
 
 // 特徴ベクトルのケースクラス
-case class MFD(value: DenseMatrix[Double])
+case class MFD(value: DenseMatrix[Double]) extends CFD[Double]

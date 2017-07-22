@@ -5,8 +5,6 @@ import com.recommendations.collaborative_filtering.preprocessings.MFD
 import breeze.stats.distributions.Gaussian
 import com.recommendations.collaborative_filtering.utils.MatrixUtil._
 
-import scala.annotation.tailrec
-
 /**
   * Matrix Factorizationモデル　
   *
@@ -33,16 +31,11 @@ class MatrixFactorization(mfd: MFD, k: Int) {
     * @param threshold
     * @return
     */
-  def fitIterator(epochs: Int = 1000, gamma: Double = 0.005, beta: Double = 0.02, threshold: Double = 0.1): Unit = {
-    (1 to epochs).par.foreach { i =>
-      val forIterator = mfd.value.iterator
-      go(forIterator)
-      val allError = getAllError(beta)
-      println(allError)
-    }
-    def go(forIterator: Iterator[((Int, Int), Double)]): Unit = {
-      if(forIterator.hasNext) {
-        val data = forIterator.next
+  def fitIterator(epochs: Int = 30, gamma: Double = 0.005, beta: Double = 0.02, threshold: Double = 0.1): Unit = {
+    @annotation.tailrec
+    def fit(mfdIterator: Iterator[((Int, Int), Double)]): Unit = {
+      if(mfdIterator.hasNext) {
+        val data = mfdIterator.next
         val userId = data._1._1
         val itemId = data._1._2
         val rate = data._2
@@ -51,8 +44,15 @@ class MatrixFactorization(mfd: MFD, k: Int) {
           userW.value(::, userId) += gamma * (error * itemW.value(::, itemId) - beta * userW.value(::, userId))
           itemW.value(::, itemId) += gamma * (error * userW.value(::, userId) - beta * itemW.value(::, itemId))
         }
-        go(forIterator)
+        fit(mfdIterator)
       }
+    }
+
+    (1 to epochs).par.foreach { i =>
+      val mfdIterator = mfd.value.iterator
+      fit(mfdIterator)
+      val allError = getAllError(beta)
+      println(allError)
     }
   }
 
@@ -79,20 +79,15 @@ class MatrixFactorization(mfd: MFD, k: Int) {
     */
   private def getAllError(beta: Double): Double = {
     @annotation.tailrec
-    def calcError(forIterator: Iterator[((Int, Int), Double)], error: Double): Double = {
-      if(forIterator.hasNext) {
-        val data = forIterator.next
+    def calcError(mfdIterator: Iterator[((Int, Int), Double)], error: Double): Double = {
+      if(mfdIterator.hasNext) {
+        val data = mfdIterator.next
         val userId = data._1._1
         val itemId = data._1._2
         val rate = data._2
-        if(rate != 0.0) {
-          calcError(forIterator, error + Math.pow(rate - predict(userId, itemId), 2.0))
-        } else {
-          calcError(forIterator, error)
-        }
-      } else {
-        error
-      }
+        if(rate != 0.0) calcError(mfdIterator, error + Math.pow(rate - predict(userId, itemId), 2.0))
+        else calcError(mfdIterator, error)
+      } else error
     }
     calcError(mfd.value.iterator, 0.0) + beta * (calcNorm(userW.value) + calcNorm(itemW.value))
   }
@@ -103,3 +98,7 @@ class MatrixFactorization(mfd: MFD, k: Int) {
 
 // 重み行列のケースクラス
 case class MFW(value: DenseMatrix[Double])
+
+// ここをうまいことuserId, itemId, rateにmappingできないか
+// MFDIterator.value.userId的な感じで
+case class MFDIterator(value: Iterable[((Int, Int), Double)])
