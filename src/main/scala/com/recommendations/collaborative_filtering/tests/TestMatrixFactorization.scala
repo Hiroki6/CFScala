@@ -11,10 +11,10 @@ object TestMatrixFactorization extends App {
   val itemFilePath = "data/ml-100k/u.item"
   val rateFilePath = "data/ml-100k/u1.base"
   val mfdGenerator = new MFDGenerator
-  // userIdMapとitemIdMapを初期化
+
   logger.info("intialize map")
   mfdGenerator.apply(userFilePath, itemFilePath, '|')
-  // MFDを取得
+
   logger.info("get MFD")
   val mfd = mfdGenerator.getMatrix(rateFilePath, '\t')
 
