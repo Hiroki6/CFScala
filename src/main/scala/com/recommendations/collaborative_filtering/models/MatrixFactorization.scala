@@ -26,7 +26,7 @@ class MatrixFactorization(mfd: MFD, K: Int) {
   /**
     * 学習
     */
-  def fitIterator(epochs: Int = 0, eta: Double = 0.005, lambda: Double = 0.02, threshold: Double = 0.1): Unit = {
+  def fitIterator(epochs: Int = 30, eta: Double = 0.005, lambda: Double = 0.02, threshold: Double = 0.1): Unit = {
     (1 to epochs).par.foreach { i =>
       fit(mfd.iterator, eta, lambda)
       val allError = getAllError(lambda)
