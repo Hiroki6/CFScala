@@ -18,6 +18,7 @@ class MFDGenerator {
     updateIdMap(itemIdMap, itemFilePath, separator)
   }
 
+  // idと配列のindex更新
   def updateIdMap(idMap: HashMap[String, Int], filePath: String, separator: Char): Unit = {
     var index = idMap.size
     IO.reader(new File(filePath), IO.utf8) { reader =>
@@ -29,6 +30,7 @@ class MFDGenerator {
     }
   }
 
+  // MFD取得
   def getMatrix(rateFilePath: String, separator: Char): MFD = {
     val data = DenseMatrix.zeros[Double](userIdMap.size, itemIdMap.size)
     IO.reader(new File(rateFilePath), IO.utf8) { reader =>
@@ -45,4 +47,18 @@ class MFDGenerator {
 }
 
 // 特徴ベクトルのケースクラス
-case class MFD(value: DenseMatrix[Double]) extends CFD[Double]
+case class MFD(value: DenseMatrix[Double]) extends CFD[Double] {
+  def iterator = MFDIterator(value.iterator)
+}
+
+// DenseMatrix[Double].iteratorをラップしたケースクラス
+case class MFDIterator(value: Iterator[((Int, Int), Double)]) {
+  def hasNext = value.hasNext
+  def getData = {
+    val data = value.next
+    val userId= data._1._1
+    val itemId = data._1._2
+    val rate = data._2
+    (userId, itemId, rate)
+  }
+}
