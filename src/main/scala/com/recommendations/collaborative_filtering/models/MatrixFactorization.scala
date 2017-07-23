@@ -16,7 +16,7 @@ class MatrixFactorization(mfd: MFD, K: Int) {
   // ユーザー重み行列
   val userW = getInitialMatrix(mfd.value.rows)
   // アイテム重み行列
-  val itemW = getInitialMatrix(mfd.value.cols).t
+  val itemW = getInitialMatrix(mfd.value.cols).transpose
 
   def getInitialMatrix(elemCounts: Int) = {
     val normal = Gaussian(0, 0.1)
@@ -82,5 +82,5 @@ class MatrixFactorization(mfd: MFD, K: Int) {
 
 // 重み行列のケースクラス
 case class MFW(value: DenseMatrix[Double]) {
-  def t = this.copy(value.t)
+  def transpose = this.copy(value.t)
 }
