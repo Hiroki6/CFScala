@@ -21,10 +21,12 @@ object TestMatrixFactorization extends App {
   val trainMFD = mfdGenerator.getMatrix(trainFilePath, '\t')
 
   logger.info("initialize")
-  val mf = new MatrixFactorization(trainMFD, 8)
+  val mf = new MatrixFactorization(mfd = trainMFD, K = 100)
 
   logger.info("fit")
-  mf.fitIterator(epochs = 30)
+  val start = System.currentTimeMillis
+  mf.fitIterator(epochs = 100)
+  println((System.currentTimeMillis - start)/1000)
 
   logger.info("get test MFD")
   val testMFD = mfdGenerator.getMatrix(testFilePath, '\t')
@@ -33,5 +35,5 @@ object TestMatrixFactorization extends App {
   val evalMF = new EvalMatrixFactorization(mf)
 
   logger.info("evaluation")
-  println(evalMF.calcMSE(testMFD))
+  println(evalMF.calcRMSE(testMFD))
 }

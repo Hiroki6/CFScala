@@ -7,7 +7,7 @@ object CalculcationUtil {
   @annotation.tailrec
   def calcError(mfdIterator: MFDIterator, error: Double)(predictF: (Int, Int) => Double)(errorF: (Double, Double) => Double): Double = {
     if(mfdIterator.hasNext) {
-      val (userId, itemId, rate) = mfdIterator.getData
+      val (userId, itemId, rate) = mfdIterator.next
       if(rate != 0.0) calcError(mfdIterator, error + errorF(rate, predictF(userId, itemId)))(predictF)(errorF)
       else calcError(mfdIterator, error)(predictF)(errorF)
     } else error

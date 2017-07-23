@@ -19,7 +19,7 @@ class MatrixFactorization(mfd: MFD, K: Int) {
   val itemW = getInitialMatrix(mfd.value.cols).t
 
   def getInitialMatrix(elemCounts: Int) = {
-    val normal = Gaussian(0, 1)
+    val normal = Gaussian(0, 0.1)
     MFW(DenseMatrix.rand(elemCounts, K, normal))
   }
 
@@ -37,7 +37,7 @@ class MatrixFactorization(mfd: MFD, K: Int) {
   @annotation.tailrec
   private def fit(mfdIterator: MFDIterator, eta: Double, lambda: Double): Unit = {
     if(mfdIterator.hasNext) {
-      val (userId, itemId, rate) = mfdIterator.getData
+      val (userId, itemId, rate) = mfdIterator.next
       if(rate != 0) {
         val error = rate - predict(userId, itemId)
         for(k <- 0 until K) {
