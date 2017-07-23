@@ -54,7 +54,7 @@ case class MFD(value: DenseMatrix[Double]) extends CFD[Double] {
 // DenseMatrix[Double].iteratorをラップしたケースクラス
 case class MFDIterator(value: Iterator[((Int, Int), Double)]) {
   def hasNext = value.hasNext
-  def getData = {
+  def next = {
     val data = value.next
     val userId= data._1._1
     val itemId = data._1._2
