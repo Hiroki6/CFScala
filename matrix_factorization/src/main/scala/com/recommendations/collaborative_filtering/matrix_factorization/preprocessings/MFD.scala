@@ -4,7 +4,7 @@ import java.io.File
 
 import sbt.io._
 import breeze.linalg._
-import com.recommendations.collaborative_filtering.core.infrastructures.{CFD, GeneratorSupport}
+import com.recommendations.collaborative_filtering.core.infrastructures.{CFD, CFDIterator, GeneratorSupport}
 
 /**
   * Matrix Factorizationのデータクラス
@@ -32,8 +32,7 @@ case class MFD(value: DenseMatrix[Double]) extends CFD[Double] {
 }
 
 // DenseMatrix[Double].iteratorをラップしたケースクラス
-case class MFDIterator(value: Iterator[((Int, Int), Double)]) {
-  def hasNext = value.hasNext
+case class MFDIterator(value: Iterator[((Int, Int), Double)]) extends CFDIterator[Double] {
   def next = {
     val data = value.next
     val userId= data._1._1
