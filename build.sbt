@@ -1,4 +1,8 @@
-name := "MatrixFactorization"
+name := "CFScala"
+
+lazy val commonSettings = Seq(
+  organization := "com.recommendations.collaborative_filtering"
+)
 
 version := "1.0"
 
@@ -14,3 +18,13 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2"
 )
+
+lazy val matrix_factorization = (project in file("matrix_factorization"))
+  .settings(
+    commonSettings
+  )
+
+lazy val factorization_machines = (project in file("factorization_machines"))
+  .settings(
+    commonSettings
+  )
