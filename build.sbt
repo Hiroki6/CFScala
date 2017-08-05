@@ -9,7 +9,6 @@ lazy val commonSettings = Seq(
 
 
 // https://mvnrepository.com/artifact/org.apache.commons/commons-io
-//libraryDependencies ++= Seq(
 lazy val dependencies = Seq(
   "org.apache.commons" % "commons-io" % "1.3.2",
   "org.scalanlp" %% "breeze" % "0.13.1",
@@ -20,16 +19,21 @@ lazy val dependencies = Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2"
 )
 
-lazy val matrix_factorization = (project in file("matrix_factorization"))
+lazy val core = (project in file("core"))
   .settings(
     commonSettings ++ Seq(
       libraryDependencies ++= dependencies
     )
   )
 
-lazy val factorization_machines = (project in file("factorization_machines"))
+lazy val matrix_factorization = (project in file("matrix_factorization"))
+  .dependsOn(core)
   .settings(
-    commonSettings ++ Seq(
-      libraryDependencies ++= dependencies
-    )
+    commonSettings
+  )
+
+lazy val factorization_machines = (project in file("factorization_machines"))
+  .dependsOn(core)
+  .settings(
+    commonSettings
   )

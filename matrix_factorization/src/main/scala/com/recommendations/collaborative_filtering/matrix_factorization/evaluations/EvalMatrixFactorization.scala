@@ -1,8 +1,8 @@
-package com.recommendations.collaborative_filtering.evaluations
+package com.recommendations.collaborative_filtering.matrix_factorization.evaluations
 
-import com.recommendations.collaborative_filtering.models.MatrixFactorization
-import com.recommendations.collaborative_filtering.preprocessings.{MFD, MFDIterator}
-import com.recommendations.collaborative_filtering.utils.CalculcationUtil._
+import com.recommendations.collaborative_filtering.matrix_factorization.models.MatrixFactorization
+import com.recommendations.collaborative_filtering.matrix_factorization.preprocessings.{MFD, MFDIterator}
+import com.recommendations.collaborative_filtering.matrix_factorization.utils.CalculcationUtil._
 
 /**
   * MFの評価クラス

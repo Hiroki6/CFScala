@@ -1,35 +1,15 @@
-package com.recommendations.collaborative_filtering.preprocessings
+package com.recommendations.collaborative_filtering.matrix_factorization.preprocessings
 
 import java.io.File
 
 import sbt.io._
 import breeze.linalg._
-import collection.mutable.HashMap
+import com.recommendations.collaborative_filtering.core.infrastructures.{CFD, GeneratorSupport}
 
 /**
   * Matrix Factorizationのデータクラス
   */
-class MFDGenerator {
-  val userIdMap: HashMap[String, Int] = new HashMap[String, Int]
-  val itemIdMap: HashMap[String, Int] = new HashMap[String, Int]
-
-  def apply(userFilePath: String, itemFilePath: String, separator: Char) = {
-    updateIdMap(userIdMap, userFilePath, separator)
-    updateIdMap(itemIdMap, itemFilePath, separator)
-  }
-
-  // idと配列のindex更新
-  def updateIdMap(idMap: HashMap[String, Int], filePath: String, separator: Char): Unit = {
-    var index = idMap.size
-    IO.reader(new File(filePath), IO.utf8) { reader =>
-      IO.foreachLine(reader) { line =>
-        val id = line.split(separator)(0)
-        idMap.update(id, index)
-        index += 1
-      }
-    }
-  }
-
+class MFDGenerator extends GeneratorSupport {
   // MFD取得
   def getMatrix(rateFilePath: String, separator: Char): MFD = {
     val data = DenseMatrix.zeros[Double](userIdMap.size, itemIdMap.size)
