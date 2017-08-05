@@ -41,8 +41,9 @@ class MatrixFactorization(mfd: MFD, K: Int) {
       if(rate != 0) {
         val error = rate - predict(userId, itemId)
         for(k <- 0 until K) {
+          val prevU = userW.value(userId, k)
           userW.value(userId, k) += eta * (2 * error * itemW.value(k, itemId) - lambda * userW.value(userId, k))
-          itemW.value(k, itemId) += eta * (2 * error * userW.value(userId, k) - lambda * itemW.value(k, itemId))
+          itemW.value(k, itemId) += eta * (2 * error * prevU - lambda * itemW.value(k, itemId))
         }
       }
     fit(mfdIterator, eta, lambda)

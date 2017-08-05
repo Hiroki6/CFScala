@@ -1,7 +1,7 @@
 package com.recommendations.collaborative_filtering.evaluations
 
 import com.recommendations.collaborative_filtering.models.MatrixFactorization
-import com.recommendations.collaborative_filtering.preprocessings.{CFD, MFD, MFDIterator}
+import com.recommendations.collaborative_filtering.preprocessings.{MFD, MFDIterator}
 import com.recommendations.collaborative_filtering.utils.CalculcationUtil._
 
 /**
