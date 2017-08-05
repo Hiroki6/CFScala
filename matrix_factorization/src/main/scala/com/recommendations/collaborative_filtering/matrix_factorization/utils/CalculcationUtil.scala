@@ -1,6 +1,6 @@
-package com.recommendations.collaborative_filtering.utils
+package com.recommendations.collaborative_filtering.matrix_factorization.utils
 
-import com.recommendations.collaborative_filtering.preprocessings.MFDIterator
+import com.recommendations.collaborative_filtering.matrix_factorization.preprocessings.MFDIterator
 
 object CalculcationUtil {
 

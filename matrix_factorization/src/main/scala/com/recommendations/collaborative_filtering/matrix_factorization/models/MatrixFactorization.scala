@@ -1,10 +1,10 @@
-package com.recommendations.collaborative_filtering.models
+package com.recommendations.collaborative_filtering.matrix_factorization.models
 
 import breeze.linalg.DenseMatrix
-import com.recommendations.collaborative_filtering.preprocessings.{MFD, MFDIterator}
 import breeze.stats.distributions.Gaussian
-import com.recommendations.collaborative_filtering.utils.MatrixUtil._
-import com.recommendations.collaborative_filtering.utils.CalculcationUtil._
+import com.recommendations.collaborative_filtering.core.utils.MatrixUtil._
+import com.recommendations.collaborative_filtering.matrix_factorization.preprocessings.{MFD, MFDIterator}
+import com.recommendations.collaborative_filtering.matrix_factorization.utils.CalculcationUtil._
 
 /**
   * Matrix Factorizationモデル　

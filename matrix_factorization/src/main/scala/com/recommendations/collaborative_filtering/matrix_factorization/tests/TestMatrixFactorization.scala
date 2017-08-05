@@ -1,8 +1,8 @@
-package com.recommendations.collaborative_filtering.tests
+package com.recommendations.collaborative_filtering.matrix_factorization.tests
 
-import com.recommendations.collaborative_filtering.evaluations.EvalMatrixFactorization
-import com.recommendations.collaborative_filtering.models.MatrixFactorization
-import com.recommendations.collaborative_filtering.preprocessings.MFDGenerator
+import com.recommendations.collaborative_filtering.matrix_factorization.evaluations.EvalMatrixFactorization
+import com.recommendations.collaborative_filtering.matrix_factorization.models.MatrixFactorization
+import com.recommendations.collaborative_filtering.matrix_factorization.preprocessings.MFDGenerator
 import com.typesafe.scalalogging.Logger
 
 object TestMatrixFactorization extends App {

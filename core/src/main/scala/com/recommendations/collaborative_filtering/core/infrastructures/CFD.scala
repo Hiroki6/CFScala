@@ -1,4 +1,4 @@
-package com.recommendations.collaborative_filtering.preprocessings
+package com.recommendations.collaborative_filtering.core.infrastructures
 
 import breeze.linalg.DenseMatrix
 
