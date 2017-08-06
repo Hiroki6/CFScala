@@ -51,6 +51,7 @@ class FMDGen extends GeneratorSupport {
     */
   def getMatrix(rateFilePath: String, separator: Char): (FMD, List[Double]) = {
     updateFeatureMap()
+    println(featureMap)
     val rateList = getRateList(rateFilePath, separator)
     val data = DenseMatrix.zeros[Double](rateList.size, featureMap.size)
     val labels = ListBuffer[Double]()

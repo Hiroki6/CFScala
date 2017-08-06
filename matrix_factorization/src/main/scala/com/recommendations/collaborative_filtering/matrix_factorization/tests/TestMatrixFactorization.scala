@@ -14,7 +14,7 @@ object TestMatrixFactorization extends App {
   val testFilePath = "data/ml-100k/u1.test"
   val mfdGen = new MFDGen
 
-  logger.info("intialize map")
+  logger.info("initialize map")
   mfdGen.apply(userFilePath, itemFilePath, '|')
 
   logger.info("get train MFD")

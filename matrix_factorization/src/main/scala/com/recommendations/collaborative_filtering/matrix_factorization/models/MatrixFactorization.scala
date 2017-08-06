@@ -1,26 +1,23 @@
 package com.recommendations.collaborative_filtering.matrix_factorization.models
 
 import breeze.linalg.DenseMatrix
-import breeze.stats.distributions.Gaussian
+import com.recommendations.collaborative_filtering.core.utils.MatrixUtil
 import com.recommendations.collaborative_filtering.core.utils.MatrixUtil._
 import com.recommendations.collaborative_filtering.matrix_factorization.preprocessings.{MFD, MFDIter}
 import com.recommendations.collaborative_filtering.matrix_factorization.utils.CalculcationUtil._
 
 /**
   * Matrix Factorizationモデル　
-  *
-  * @param mfd
   */
 class MatrixFactorization(mfd: MFD, K: Int) {
 
   // ユーザー重み行列
-  val userW = getInitialMatrix(mfd.value.rows)
+  val userW: MFW = getInitialMatrix(mfd.value.rows)
   // アイテム重み行列
-  val itemW = getInitialMatrix(mfd.value.cols).t
+  val itemW: MFW = getInitialMatrix(mfd.value.cols).t
 
   def getInitialMatrix(elemCounts: Int) = {
-    val normal = Gaussian(0, 0.1)
-    MFW(DenseMatrix.rand(elemCounts, K, normal))
+    MFW(MatrixUtil.getRandomDenseMatrix(elemCounts, K))
   }
 
   /**
