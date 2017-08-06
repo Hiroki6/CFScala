@@ -3,7 +3,7 @@ package com.recommendations.collaborative_filtering.matrix_factorization.models
 import breeze.linalg.DenseMatrix
 import breeze.stats.distributions.Gaussian
 import com.recommendations.collaborative_filtering.core.utils.MatrixUtil._
-import com.recommendations.collaborative_filtering.matrix_factorization.preprocessings.{MFD, MFDIterator}
+import com.recommendations.collaborative_filtering.matrix_factorization.preprocessings.{MFD, MFDIter}
 import com.recommendations.collaborative_filtering.matrix_factorization.utils.CalculcationUtil._
 
 /**
@@ -35,9 +35,9 @@ class MatrixFactorization(mfd: MFD, K: Int) {
   }
 
   @annotation.tailrec
-  private def fit(mfdIterator: MFDIterator, eta: Double, lambda: Double): Unit = {
-    if(mfdIterator.hasNext) {
-      val (userId, itemId, rate) = mfdIterator.next
+  private def fit(mfdIter: MFDIter, eta: Double, lambda: Double): Unit = {
+    if(mfdIter.hasNext) {
+      val (userId, itemId, rate) = mfdIter.next
       if(rate != 0) {
         val error = rate - predict(userId, itemId)
         for(k <- 0 until K) {
@@ -46,7 +46,7 @@ class MatrixFactorization(mfd: MFD, K: Int) {
           itemW.value(k, itemId) += eta * (2 * error * prevU - lambda * itemW.value(k, itemId))
         }
       }
-    fit(mfdIterator, eta, lambda)
+    fit(mfdIter, eta, lambda)
     }
   }
 

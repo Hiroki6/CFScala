@@ -1,11 +1,11 @@
 package com.recommendations.collaborative_filtering.matrix_factorization.utils
 
-import com.recommendations.collaborative_filtering.matrix_factorization.preprocessings.MFDIterator
+import com.recommendations.collaborative_filtering.matrix_factorization.preprocessings.MFDIter
 
 object CalculcationUtil {
 
   @annotation.tailrec
-  def calcError(mfdIterator: MFDIterator, error: Double)(predictF: (Int, Int) => Double)(errorF: (Double, Double) => Double): Double = {
+  def calcError(mfdIterator: MFDIter, error: Double)(predictF: (Int, Int) => Double)(errorF: (Double, Double) => Double): Double = {
     if(mfdIterator.hasNext) {
       val (userId, itemId, rate) = mfdIterator.next
       if(rate != 0.0) calcError(mfdIterator, error + errorF(rate, predictF(userId, itemId)))(predictF)(errorF)
