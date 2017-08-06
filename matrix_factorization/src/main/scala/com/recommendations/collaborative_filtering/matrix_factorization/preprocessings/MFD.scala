@@ -9,7 +9,7 @@ import com.recommendations.collaborative_filtering.core.infrastructures.{CFD, CF
 /**
   * Matrix Factorizationのデータクラス
   */
-class MFDGenerator extends GeneratorSupport {
+class MFDGen extends GeneratorSupport {
   // MFD取得
   def getMatrix(rateFilePath: String, separator: Char): MFD = {
     val data = DenseMatrix.zeros[Double](userIdMap.size, itemIdMap.size)
@@ -28,11 +28,11 @@ class MFDGenerator extends GeneratorSupport {
 
 // 特徴ベクトルのケースクラス
 case class MFD(value: DenseMatrix[Double]) extends CFD[Double] {
-  def iterator = MFDIterator(value.iterator)
+  def iterator = MFDIter(value.iterator)
 }
 
 // DenseMatrix[Double].iteratorをラップしたケースクラス
-case class MFDIterator(value: Iterator[((Int, Int), Double)]) extends CFDIterator[Double] {
+case class MFDIter(value: Iterator[((Int, Int), Double)]) extends CFDIterator[Double] {
   def next = {
     val data = value.next
     val userId= data._1._1

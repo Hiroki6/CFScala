@@ -12,7 +12,7 @@ import scala.collection.mutable.ListBuffer
 /**
   * Factorization Machinesのデータクラス
   */
-class FMDGenerator extends GeneratorSupport {
+class FMDGen extends GeneratorSupport {
   // 特徴量とindexのマッピング
   val featureMap: HashMap[String, Int] = new HashMap[String, Int]
 
@@ -64,10 +64,10 @@ class FMDGenerator extends GeneratorSupport {
 }
 
 case class FMD(value: DenseMatrix[Double]) extends CFD[Double] {
-  def iterator = FMDIterator(value.iterator)
+  def iterator = FMDIter(value.iterator)
 }
 
-case class FMDIterator(value: Iterator[((Int, Int), Double)]) extends CFDIterator[Double] {
+case class FMDIter(value: Iterator[((Int, Int), Double)]) extends CFDIterator[Double] {
   def next = {
     val data = value.next
     val index = data._1._1

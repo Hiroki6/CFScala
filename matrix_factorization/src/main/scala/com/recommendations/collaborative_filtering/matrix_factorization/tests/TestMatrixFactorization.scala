@@ -2,7 +2,7 @@ package com.recommendations.collaborative_filtering.matrix_factorization.tests
 
 import com.recommendations.collaborative_filtering.matrix_factorization.evaluations.EvalMatrixFactorization
 import com.recommendations.collaborative_filtering.matrix_factorization.models.MatrixFactorization
-import com.recommendations.collaborative_filtering.matrix_factorization.preprocessings.MFDGenerator
+import com.recommendations.collaborative_filtering.matrix_factorization.preprocessings.MFDGen
 import com.typesafe.scalalogging.Logger
 
 object TestMatrixFactorization extends App {
@@ -12,13 +12,13 @@ object TestMatrixFactorization extends App {
   val itemFilePath = "data/ml-100k/u.item"
   val trainFilePath = "data/ml-100k/u1.base"
   val testFilePath = "data/ml-100k/u1.test"
-  val mfdGenerator = new MFDGenerator
+  val mfdGen = new MFDGen
 
   logger.info("intialize map")
-  mfdGenerator.apply(userFilePath, itemFilePath, '|')
+  mfdGen.apply(userFilePath, itemFilePath, '|')
 
   logger.info("get train MFD")
-  val trainMFD = mfdGenerator.getMatrix(trainFilePath, '\t')
+  val trainMFD = mfdGen.getMatrix(trainFilePath, '\t')
 
   logger.info("initialize")
   val mf = new MatrixFactorization(mfd = trainMFD, K = 100)
@@ -29,7 +29,7 @@ object TestMatrixFactorization extends App {
   println((System.currentTimeMillis - start)/1000)
 
   logger.info("get test MFD")
-  val testMFD = mfdGenerator.getMatrix(testFilePath, '\t')
+  val testMFD = mfdGen.getMatrix(testFilePath, '\t')
 
   logger.info("initial eval class")
   val evalMF = new EvalMatrixFactorization(mf)
