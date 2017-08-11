@@ -11,3 +11,8 @@ trait CFDIterator[T] {
   def hasNext = value.hasNext
   def next: (Int, Int, T)
 }
+
+case class CFW[T](value: DenseMatrix[T]) {
+  def t = this.copy(value.t)
+}
+
