@@ -21,11 +21,11 @@ object TestMatrixFactorization extends App {
   val trainMFD = mfdGen.getMatrix(trainFilePath, '\t')
 
   logger.info("initialize")
-  val mf = new MatrixFactorization(mfd = trainMFD, K = 100)
+  val mf = new MatrixFactorization(mfdGen.userIdMap, mfdGen.itemIdMap, K = 100)
 
   logger.info("fit")
   val start = System.currentTimeMillis
-  mf.fitIterator(epochs = 100)
+  mf.fitIterator(trainMFD, epochs = 100)
   println((System.currentTimeMillis - start)/1000)
 
   logger.info("get test MFD")

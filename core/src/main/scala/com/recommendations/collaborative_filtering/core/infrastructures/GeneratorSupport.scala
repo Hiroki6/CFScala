@@ -4,11 +4,12 @@ import java.io.File
 
 import sbt.io._
 
+import scala.collection.mutable
 import scala.collection.mutable.HashMap
 
 class GeneratorSupport {
-  val userIdMap: HashMap[String, Int] = new HashMap[String, Int]
-  val itemIdMap: HashMap[String, Int] = new HashMap[String, Int]
+  val userIdMap: UserIdMap = UserIdMap()
+  val itemIdMap: ItemIdMap = ItemIdMap()
 
   def apply(userFilePath: String, itemFilePath: String, separator: Char) = {
     updateIdMap(userIdMap, userFilePath, separator)
@@ -16,7 +17,7 @@ class GeneratorSupport {
   }
 
   // idと配列のindex更新
-  def updateIdMap(idMap: HashMap[String, Int], filePath: String, separator: Char): Unit = {
+  def updateIdMap(idMap: ElementMap[String, Int], filePath: String, separator: Char): Unit = {
     var index = idMap.size
     IO.reader(new File(filePath), IO.utf8) { reader =>
       IO.foreachLine(reader) { line =>
@@ -28,3 +29,14 @@ class GeneratorSupport {
   }
 
 }
+
+trait ElementMap[K, V] {
+  val value: HashMap[K, V]
+  def update(k: K, v: V) = value.update(k, v)
+  def size = value.size
+  def apply(key: K) = value(key)
+}
+
+case class UserIdMap(value: HashMap[String, Int] = new mutable.HashMap[String, Int]) extends ElementMap[String, Int]
+
+case class ItemIdMap(value: HashMap[String, Int] = new mutable.HashMap[String, Int]) extends ElementMap[String, Int]

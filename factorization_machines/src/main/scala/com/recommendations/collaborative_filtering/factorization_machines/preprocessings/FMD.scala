@@ -3,7 +3,7 @@ package com.recommendations.collaborative_filtering.factorization_machines.prepr
 import java.io.File
 
 import breeze.linalg.DenseMatrix
-import com.recommendations.collaborative_filtering.core.infrastructures.{CFD, CFDIterator, GeneratorSupport}
+import com.recommendations.collaborative_filtering.core.infrastructures.{CFD, CFDIterator, ElementMap, GeneratorSupport}
 import sbt.io._
 
 import scala.collection.mutable.HashMap
@@ -21,8 +21,8 @@ class FMDGen extends GeneratorSupport {
     updateFeatureByMapData(itemIdMap, featureMap.size - 1, "i_")
   }
 
-  def updateFeatureByMapData(mapData: HashMap[String, Int], headIndex: Int = 0, headString: String = ""): Unit = {
-    for((n, i) <- mapData) {
+  def updateFeatureByMapData(mapData: ElementMap[String, Int], headIndex: Int = 0, headString: String = ""): Unit = {
+    for((n, i) <- mapData.value) {
       featureMap.update(headString + n, i + headIndex)
     }
   }
