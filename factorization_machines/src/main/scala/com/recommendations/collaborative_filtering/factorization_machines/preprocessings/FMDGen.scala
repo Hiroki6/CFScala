@@ -2,12 +2,11 @@ package com.recommendations.collaborative_filtering.factorization_machines.prepr
 
 import java.io.File
 
-import breeze.linalg.{CSCMatrix, DenseMatrix, DenseVector}
+import breeze.linalg.{CSCMatrix, DenseVector}
 import com.recommendations.collaborative_filtering.core.infrastructures._
 import com.recommendations.collaborative_filtering.factorization_machines.preprocessings.Alias.{Rate, RateList}
 import sbt.io._
 
-import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
 
 /**

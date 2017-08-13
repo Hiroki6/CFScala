@@ -1,12 +1,10 @@
 package com.recommendations.collaborative_filtering.factorization_machines.models
 
-import breeze.linalg.{CSCMatrix, DenseMatrix, DenseVector}
-import com.recommendations.collaborative_filtering.core.infrastructures.{ItemIdMap, UserIdMap}
+import breeze.linalg.{CSCMatrix, DenseVector}
 import com.recommendations.collaborative_filtering.core.utils.MatrixUtil
 import com.recommendations.collaborative_filtering.factorization_machines.preprocessings.Alias.{Rate, RateList}
-import com.recommendations.collaborative_filtering.factorization_machines.preprocessings.{FMD, FMDGen}
+import com.recommendations.collaborative_filtering.factorization_machines.preprocessings.FMDGen
 
-import scala.collection.mutable.HashMap
 
 /**
   * Factorization Machinesモデル
