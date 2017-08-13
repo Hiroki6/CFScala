@@ -4,7 +4,6 @@ import java.io.File
 
 import sbt.io._
 
-import scala.collection.mutable
 import scala.collection.mutable.HashMap
 
 class GeneratorSupport {
@@ -37,6 +36,8 @@ trait ElementMap[K, V] {
   def apply(key: K) = value(key)
 }
 
-case class UserIdMap(value: HashMap[String, Int] = new mutable.HashMap[String, Int]) extends ElementMap[String, Int]
+case class UserIdMap(value: HashMap[String, Int] = new HashMap[String, Int]) extends ElementMap[String, Int]
 
-case class ItemIdMap(value: HashMap[String, Int] = new mutable.HashMap[String, Int]) extends ElementMap[String, Int]
+case class ItemIdMap(value: HashMap[String, Int] = new HashMap[String, Int]) extends ElementMap[String, Int]
+
+case class FeatureMap(value: HashMap[String, Int] = new HashMap[String, Int])  extends ElementMap[String, Int]

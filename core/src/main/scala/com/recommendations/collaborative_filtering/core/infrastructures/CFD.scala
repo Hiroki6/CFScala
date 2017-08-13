@@ -1,9 +1,9 @@
 package com.recommendations.collaborative_filtering.core.infrastructures
 
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseMatrix, Matrix}
 
 trait CFD[T] {
-  val value: DenseMatrix[T]
+  val value: Matrix[T]
 }
 
 trait CFDIterator[T] {
