@@ -1,5 +1,6 @@
 package com.recommendations.collaborative_filtering.factorization_machines.tests
 
+import com.recommendations.collaborative_filtering.factorization_machines.models.FactorizationMachines
 import com.recommendations.collaborative_filtering.factorization_machines.preprocessings.FMDGen
 import com.typesafe.scalalogging.Logger
 
@@ -15,8 +16,9 @@ object TestFactorizationMachines extends App {
   logger.info("initialize map")
   fmdGen.apply(userFilePath, itemFilePath, '|')
 
+  logger.info("get train FM Model")
+  val fm = new FactorizationMachines(fmdGen, 8)
+
   logger.info("get train FMD")
-  val (trainFMD, label) = fmdGen.getMatrix(testFilePath, '\t')
-  println(trainFMD)
-  println(label)
+  val ratelist = fmdGen.getRateList(trainFilePath, '\t')
 }

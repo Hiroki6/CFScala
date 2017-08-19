@@ -2,11 +2,11 @@ package com.recommendations.collaborative_filtering.factorization_machines.prepr
 
 import java.io.File
 
-import breeze.linalg.DenseMatrix
-import com.recommendations.collaborative_filtering.core.infrastructures.{CFD, CFDIterator, ElementMap, GeneratorSupport}
+import breeze.linalg.{CSCMatrix, DenseVector}
+import com.recommendations.collaborative_filtering.core.infrastructures._
+import com.recommendations.collaborative_filtering.factorization_machines.preprocessings.Alias.{Rate, RateList}
 import sbt.io._
 
-import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -14,7 +14,12 @@ import scala.collection.mutable.ListBuffer
   */
 class FMDGen extends GeneratorSupport {
   // 特徴量とindexのマッピング
-  val featureMap: HashMap[String, Int] = new HashMap[String, Int]
+  val featureMap: FeatureMap = FeatureMap()
+
+  override def apply(userFilePath: String, itemFilePath: String, separator: Char) = {
+    super.apply(userFilePath, itemFilePath, separator)
+    updateFeatureMap()
+  }
 
   def updateFeatureMap() = {
     updateFeatureByMapData(userIdMap, 0, "u_")
@@ -31,7 +36,7 @@ class FMDGen extends GeneratorSupport {
     * 教師データから必要なデータを取り出す
     * @return Seq[(userId: String, itemId: String, rate: Double)]
     */
-  def getRateList(rateFilePath: String, separator: Char): List[(String, String, Double)] = {
+  def getRateList(rateFilePath: String, separator: Char): RateList = {
     val rateList = ListBuffer[(String, String, Double)]()
     IO.reader(new File(rateFilePath), IO.utf8) { reader =>
       IO.foreachLine(reader) { line =>
@@ -50,21 +55,35 @@ class FMDGen extends GeneratorSupport {
     * @return (FMD, labels: List[Double])
     */
   def getMatrix(rateFilePath: String, separator: Char): (FMD, List[Double]) = {
-    updateFeatureMap()
-    println(featureMap)
     val rateList = getRateList(rateFilePath, separator)
-    val data = DenseMatrix.zeros[Double](rateList.size, featureMap.size)
+    //val data = DenseMatrix.zeros[Double](rateList.size, featureMap.size)
+    val data = CSCMatrix.zeros[Double](rateList.size, featureMap.size)
     val labels = ListBuffer[Double]()
     rateList.zipWithIndex.foreach { case ((userId: String, itemId: String, rate: Double), index: Int) =>
-      data.update(index, featureMap("u_" + userId), 1.0)
-      data.update(index, featureMap("i_" + itemId), 1.0)
+      data.update(index, getUserIndex(userId), 1.0)
+      data.update(index, getItemIndex(itemId), 1.0)
       labels += (rate)
     }
     (FMD(data), labels.toList)
   }
+
+  def getFMD(userId: String, itemId: String): CSCMatrix[Double] = {
+    val fmd = CSCMatrix.zeros[Double](1, this.featureMap.size)
+    fmd.update(1, getUserIndex(userId), 1.0)
+    fmd.update(1, getItemIndex(itemId), 1.0)
+    fmd
+  }
+
+  def getFMDByRate(rate: Rate): (CSCMatrix[Double], Double) = {
+    (getFMD(rate._1, rate._2), rate._3)
+  }
+
+  def getUserIndex(userId: String) = this.featureMap("u_" + userId)
+
+  def getItemIndex(itemId: String) = this.featureMap("i_" + itemId)
 }
 
-case class FMD(value: DenseMatrix[Double]) extends CFD[Double] {
+case class FMD(value: CSCMatrix[Double]) extends CFD[Double] {
   def iterator = FMDIter(value.iterator)
 }
 
@@ -77,3 +96,11 @@ case class FMDIter(value: Iterator[((Int, Int), Double)]) extends CFDIterator[Do
     (index, feature, featureValue)
   }
 }
+
+
+/**
+  * FM学習用のベクトル
+  * @param data
+  * @param label
+  */
+case class FMDVector(data: DenseVector[Double], label: Double)
