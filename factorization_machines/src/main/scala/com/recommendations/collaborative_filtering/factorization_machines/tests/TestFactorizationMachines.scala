@@ -21,4 +21,7 @@ object TestFactorizationMachines extends App {
 
   logger.info("get train FMD")
   val ratelist = fmdGen.getRateList(trainFilePath, '\t')
+
+  logger.info("start fit")
+  fm.fitIterator(ratelist, 2, 0.05)
 }
