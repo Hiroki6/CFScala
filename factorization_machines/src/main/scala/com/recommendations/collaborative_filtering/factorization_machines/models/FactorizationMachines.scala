@@ -35,7 +35,7 @@ class FactorizationMachines(fmdGen: FMDGen, K: Int) {
     (1 to epochs).foreach { epoch =>
       rateList.par.foreach { rate =>
         val fmdVector = fmdGen.getFMDByRate(rate)
-        val error = calcError(rate, fmdVector)
+        val error = calcError(fmdVector)
         updateW0(error, eta)
         fit(fmdVector.data, error, eta)
       }
@@ -76,6 +76,7 @@ class FactorizationMachines(fmdGen: FMDGen, K: Int) {
   /**
     * 相互作用の項の計算
     *
+    * iterations = 0.0
     * @loop
     * for f in xrange(self.K):
     *   dot_sum = 0.0
@@ -108,7 +109,7 @@ class FactorizationMachines(fmdGen: FMDGen, K: Int) {
     loop(fmd, 0, 0.0)
   }
 
-  private def calcError(rate: Rate, fmdVector: FMDVector): Double = fmdVector.label - predict(fmdVector.data)
+  private def calcError(fmdVector: FMDVector): Double = fmdVector.label - predict(fmdVector.data)
 
   private def updateW0(error: Double, eta: Double): Unit = {
     val gradValue = 2 * eta * (error + this.regs(0) * this.w0)
