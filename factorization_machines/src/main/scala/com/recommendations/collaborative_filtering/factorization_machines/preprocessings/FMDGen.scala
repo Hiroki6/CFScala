@@ -2,7 +2,7 @@ package com.recommendations.collaborative_filtering.factorization_machines.prepr
 
 import java.io.File
 
-import breeze.linalg.{CSCMatrix, DenseVector}
+import breeze.linalg.{CSCMatrix, DenseMatrix, DenseVector}
 import com.recommendations.collaborative_filtering.core.infrastructures._
 import com.recommendations.collaborative_filtering.factorization_machines.preprocessings.Alias.{Rate, RateList}
 import sbt.io._
@@ -56,7 +56,6 @@ class FMDGen extends GeneratorSupport {
     */
   def getMatrix(rateFilePath: String, separator: Char): (FMD, List[Double]) = {
     val rateList = getRateList(rateFilePath, separator)
-    //val data = DenseMatrix.zeros[Double](rateList.size, featureMap.size)
     val data = CSCMatrix.zeros[Double](rateList.size, featureMap.size)
     val labels = ListBuffer[Double]()
     rateList.zipWithIndex.foreach { case ((userId: String, itemId: String, rate: Double), index: Int) =>
@@ -68,14 +67,15 @@ class FMDGen extends GeneratorSupport {
   }
 
   def getFMD(userId: String, itemId: String): CSCMatrix[Double] = {
-    val fmd = CSCMatrix.zeros[Double](1, this.featureMap.size)
-    fmd.update(1, getUserIndex(userId), 1.0)
-    fmd.update(1, getItemIndex(itemId), 1.0)
-    fmd
+    val fmd = new CSCMatrix.Builder[Double](rows = 1, cols = this.featureMap.size)
+    //val fmd = DenseVector.zeros[Double](this.featureMap.size)
+    fmd.add(0, getUserIndex(userId), 1.0)
+    fmd.add(0, getItemIndex(itemId), 1.0)
+    fmd.result()
   }
 
-  def getFMDByRate(rate: Rate): (CSCMatrix[Double], Double) = {
-    (getFMD(rate._1, rate._2), rate._3)
+  def getFMDByRate(rate: Rate): FMDVector = {
+    FMDVector(FMD(getFMD(rate._1, rate._2)), rate._3)
   }
 
   def getUserIndex(userId: String) = this.featureMap("u_" + userId)
@@ -84,16 +84,16 @@ class FMDGen extends GeneratorSupport {
 }
 
 case class FMD(value: CSCMatrix[Double]) extends CFD[Double] {
-  def iterator = FMDIter(value.iterator)
+  def iterator = FMDIter(value.activeIterator)
 }
 
 case class FMDIter(value: Iterator[((Int, Int), Double)]) extends CFDIterator[Double] {
   def next = {
     val data = value.next
     val index = data._1._1
-    val feature = data._1._2
+    val featureIndex = data._1._2
     val featureValue = data._2
-    (index, feature, featureValue)
+    (index, featureIndex, featureValue)
   }
 }
 
@@ -103,4 +103,5 @@ case class FMDIter(value: Iterator[((Int, Int), Double)]) extends CFDIterator[Do
   * @param data
   * @param label
   */
-case class FMDVector(data: DenseVector[Double], label: Double)
+case class FMDVector(data: FMD, label: Double)
+

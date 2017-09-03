@@ -5,4 +5,5 @@ object Alias {
   type RateList = List[Rate]
 
   type Rate = (String, String, Double)
+
 }
