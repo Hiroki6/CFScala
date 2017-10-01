@@ -33,6 +33,7 @@ class FactorizationMachines(fmdGen: FMDGen, K: Int) {
    */
   def fitIterator(rateList: RateList, epochs: Int, eta: Double): Unit = {
     (1 to epochs).foreach { epoch =>
+      println(epoch)
       rateList.par.foreach { rate =>
         val fmdVector = fmdGen.getFMDByRate(rate)
         val error = calcError(fmdVector)
