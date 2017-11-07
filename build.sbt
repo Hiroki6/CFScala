@@ -17,7 +17,9 @@ lazy val dependencies = Seq(
   "org.scala-sbt" % "io_2.11" % "1.0.0-M1",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
-  "net.debasishg" %% "redisclient" % "3.4"
+  "net.debasishg" %% "redisclient" % "3.4",
+  "com.typesafe.akka" %% "akka-stream" % "2.5.6",
+  "com.typesafe.akka" %% "akka-stream-testkit" % "2.5.6" % Test
 )
 
 lazy val core = (project in file("core"))

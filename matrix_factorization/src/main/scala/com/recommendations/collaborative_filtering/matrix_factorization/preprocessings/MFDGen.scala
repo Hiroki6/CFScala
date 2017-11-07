@@ -41,3 +41,4 @@ case class MFDIter(value: Iterator[((Int, Int), Double)]) extends CFDIterator[Do
     (userId, itemId, rate)
   }
 }
+
