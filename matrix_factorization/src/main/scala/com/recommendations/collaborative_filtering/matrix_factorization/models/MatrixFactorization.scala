@@ -52,19 +52,17 @@ class MatrixFactorization(useIdMap: UserIdMap, itemIdMap: ItemIdMap, K: Int) {
 
   def fitLoop(mfd: MFD, epochs: Int = 30, eta: Double = 0.005, lambda: Double = 0.02, threshold: Double = 0.1): Unit = {
     (1 to epochs).par.foreach { epoch =>
-      for(userId <- 0 until mfd.value.rows) {
-        for(itemId <- 0 until mfd.value.cols) {
-          if(mfd.value(userId, itemId) != 0.0) {
-            val error = getRatingError(mfd.value(userId, itemId), userId, itemId)
-            for(k <- 0 until K) {
-              userW.value(userId, k) += eta * (2 * error * itemW.value(k, itemId) - lambda * userW.value(userId, k))
-              itemW.value(k, itemId) += eta * (2 * error * userW.value(userId, k) - lambda * itemW.value(k, itemId))
-            }
-          }
-        }
+      for{
+        userId <- 0 until mfd.value.rows
+        itemId <- 0 until mfd.value.cols if(mfd.value(userId, itemId) != 0.0)
+        error = getRatingError(mfd.value(userId, itemId), userId, itemId)
+        k <- 0 until K
+      } yield {
+        userW.value(userId, k) += eta * (2 * error * itemW.value(k, itemId) - lambda * userW.value(userId, k))
+        itemW.value(k, itemId) += eta * (2 * error * userW.value(userId, k) - lambda * itemW.value(k, itemId))
+        val allError = getAllError(mfd, lambda)
+        println(allError)
       }
-      val allError = getAllError(mfd, lambda)
-      println(allError)
     }
   }
 
