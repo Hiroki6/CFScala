@@ -58,11 +58,12 @@ class MatrixFactorization(useIdMap: UserIdMap, itemIdMap: ItemIdMap, K: Int) {
         error = getRatingError(mfd.value(userId, itemId), userId, itemId)
         k <- 0 until K
       } yield {
+        val prevU = userW.value(userId, k)
         userW.value(userId, k) += eta * (2 * error * itemW.value(k, itemId) - lambda * userW.value(userId, k))
-        itemW.value(k, itemId) += eta * (2 * error * userW.value(userId, k) - lambda * itemW.value(k, itemId))
-        val allError = getAllError(mfd, lambda)
-        println(allError)
+        itemW.value(k, itemId) += eta * (2 * error * prevU - lambda * itemW.value(k, itemId))
       }
+      val allError = getAllError(mfd, lambda)
+      println(allError)
     }
   }
 
