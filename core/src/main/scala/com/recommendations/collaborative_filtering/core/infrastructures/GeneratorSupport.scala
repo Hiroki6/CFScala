@@ -34,6 +34,7 @@ trait ElementMap[K, V] {
   def update(k: K, v: V) = value.update(k, v)
   def size = value.size
   def apply(key: K) = value(key)
+  def get(key: K): Option[V] = value.get(key)
 }
 
 case class UserIdMap(value: HashMap[String, Int] = new HashMap[String, Int]) extends ElementMap[String, Int]

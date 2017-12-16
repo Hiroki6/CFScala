@@ -6,12 +6,19 @@ import com.recommendations.collaborative_filtering.core.infrastructures.Generato
 
 
 class StreamMFDGen extends GeneratorSupport {
-  def convertRateToMFD(rateLine: String, separator: Char): MFSet = {
+  def convertRateToMFD(rateLine: String, separator: Char): Option[MFSet] = {
     val splitData = rateLine.split(separator)
-    val userId = splitData(0)
-    val itemId = splitData(1)
-    val rate = splitData(2)
-    MFSet(userIdMap(userId), itemIdMap(itemId), rate.toDouble)
+    if(splitData.length == 4) {
+      val userId = splitData(0)
+      val itemId = splitData(1)
+      val rate = splitData(2)
+      for {
+        userIndex <- userIdMap.get(userId)
+        itemIndex <- itemIdMap.get(itemId)
+      } yield {
+        MFSet(userIndex, itemIndex, rate.toDouble)
+      }
+    } else None
   }
 }
 

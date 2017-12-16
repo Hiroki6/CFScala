@@ -52,7 +52,7 @@ class MatrixFactorization(useIdMap: UserIdMap, itemIdMap: ItemIdMap, K: Int) {
 
   def fitLoop(mfd: MFD, epochs: Int = 30, eta: Double = 0.005, lambda: Double = 0.02, threshold: Double = 0.1): Unit = {
     (1 to epochs).par.foreach { epoch =>
-      for{
+      for {
         userId <- 0 until mfd.value.rows
         itemId <- 0 until mfd.value.cols if(mfd.value(userId, itemId) != 0.0)
         error = getRatingError(mfd.value(userId, itemId), userId, itemId)
