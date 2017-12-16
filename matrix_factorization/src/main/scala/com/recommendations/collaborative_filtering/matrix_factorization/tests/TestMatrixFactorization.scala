@@ -26,7 +26,7 @@ object TestMatrixFactorization extends App {
   logger.info("fit")
   val start = System.currentTimeMillis
   mf.fitIterator(trainMFD, epochs = 100)
-  println((System.currentTimeMillis - start)/1000)
+  println((System.currentTimeMillis - start)/1000.0)
 
   logger.info("get test MFD")
   val testMFD = mfdGen.getMatrix(testFilePath, '\t')
