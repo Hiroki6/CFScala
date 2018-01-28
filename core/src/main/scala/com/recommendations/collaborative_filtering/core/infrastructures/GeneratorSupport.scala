@@ -32,7 +32,7 @@ class GeneratorSupport {
 trait ElementMap[K, V] {
   val value: HashMap[K, V]
   def update(k: K, v: V) = value.update(k, v)
-  def size = value.size
+  def size: Int = value.size
   def apply(key: K) = value(key)
   def get(key: K): Option[V] = value.get(key)
 }

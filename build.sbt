@@ -1,12 +1,8 @@
-name := "CFScala"
-
 lazy val commonSettings = Seq(
   organization := "com.recommendations.collaborative_filtering",
   version := "1.0",
   scalaVersion := "2.12.2"
 )
-
-
 
 // https://mvnrepository.com/artifact/org.apache.commons/commons-io
 lazy val dependencies = Seq(
@@ -21,6 +17,12 @@ lazy val dependencies = Seq(
   "com.typesafe.akka" %% "akka-stream" % "2.5.6",
   "com.typesafe.akka" %% "akka-stream-testkit" % "2.5.6" % Test
 )
+
+lazy val cf_scala = (project in file("."))
+  .aggregate(
+    core,
+    matrix_factorization,
+    factorization_machines)
 
 lazy val core = (project in file("core"))
   .settings(
