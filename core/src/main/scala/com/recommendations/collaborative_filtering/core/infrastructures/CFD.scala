@@ -15,4 +15,3 @@ trait CFDIterator[T] {
 case class CFW[T](value: DenseMatrix[T]) {
   def t = this.copy(value.t)
 }
-
